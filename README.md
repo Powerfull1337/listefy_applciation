@@ -1,16 +1,18 @@
-# listefy_applciation
+# Listefy Application 🎵
 
-A new Flutter project.
+**Listefy** is a cross-platform music streaming app inspired by Spotify, built with Flutter and powered by Supabase.
 
-## Getting Started
+## ⚙️ Technologies
 
-This project is a starting point for a Flutter application.
+- **Flutter** — Build native apps for iOS, Android, and Web from a single codebase.  
+- **Supabase** — Open-source backend for authentication, database, and storage.  
+- **Riverpod** — Scalable and testable state management.  
+- **get_it** — Simple service locator for dependency injection.  
+- **flutter_secure_storage** — Secure token storage on the device.
 
-A few resources to get you started if this is your first Flutter project:
+## 🚀 Project Goals
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Audio streaming with smooth playback  
+- Playlist creation and management  
+- User authentication (email + OAuth)  
+- Personalized music recommendations  
