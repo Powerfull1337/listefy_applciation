@@ -4,7 +4,7 @@
 
 ## ⚙️ Technologies
 
-- **Flutter** — Build native apps for iOS, Android, and Web from a single codebase.  
+- **Flutter** — Build native apps for iOS and Android from a single codebase.  
 - **Supabase** — Open-source backend for authentication, database, and storage.  
 - **Riverpod** — Scalable and testable state management.  
 - **get_it** — Simple service locator for dependency injection.  
