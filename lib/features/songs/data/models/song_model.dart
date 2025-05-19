@@ -37,7 +37,7 @@ final List<Song> localSongs = [
     title: 'In The End',
     artist: 'Tommee Profitt',
     duration: const Duration(minutes: 3, seconds: 54),
-    audioUrl: 'assets/audio/in_the_end.mp3',
+    audioUrl: 'audio/in_the_end.mp3',
     imageUrl: 'assets/audio_images/in_the_end_image.jpg',
   ),
   Song(
@@ -45,7 +45,7 @@ final List<Song> localSongs = [
     title: 'Next To You',
     artist: 'Parasyte OST',
     duration: const Duration(minutes: 2, seconds: 24),
-    audioUrl: 'assets/audio/next_to_you.mp3',
+    audioUrl: 'audio/next_to_you.mp3',
     imageUrl: 'assets/audio_images/next_to_you_image.jpg',
   ),
 ];
