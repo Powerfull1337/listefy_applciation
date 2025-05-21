@@ -4,11 +4,10 @@ import 'package:listefy_applciation/features/auth/presentation/screens/auth_scre
 
 import 'package:listefy_applciation/home_screen.dart';
 
-
 import 'app_routes.dart';
 
-import 'package:listefy_applciation/features/songs/domain/entities/song.dart';
-import 'package:listefy_applciation/features/songs/presentation/screens/song_details_screen.dart'; 
+
+import 'package:listefy_applciation/features/songs/presentation/screens/song_details_screen.dart';
 
 class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -18,9 +17,8 @@ class AppRouter {
       case AppRoutes.auth:
         return MaterialPageRoute(builder: (_) => const AuthScreen());
       case AppRoutes.songDetails:
-        final song = settings.arguments as Song;
         return MaterialPageRoute(
-          builder: (_) => SongDetailsScreen(song: song),
+          builder: (_) => const SongDetailsScreen(),
         );
       default:
         return MaterialPageRoute(
