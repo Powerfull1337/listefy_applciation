@@ -1,117 +1,82 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:listefy_applciation/features/songs/domain/entities/song.dart';
-import 'package:audioplayers/audioplayers.dart';
 
 import 'package:listefy_applciation/features/songs/data/models/song_model.dart';
-
-final audioControllerProvider =
-    StateNotifierProvider<AudioController, AudioState>(
-  (ref) => AudioController(),
-);
+import 'package:listefy_applciation/features/songs/domain/usecases/pause_song_usecase.dart';
+import 'package:listefy_applciation/features/songs/domain/usecases/play_song_usecase.dart';
+import 'package:listefy_applciation/features/songs/domain/usecases/seek_song_usecase.dart';
 
 class AudioController extends StateNotifier<AudioState> {
-  final AudioPlayer _audioPlayer = AudioPlayer();
-  final List<Song> _allSongs = localSongs;
+  final PlaySongUseCase _play;
+  final PauseSongUseCase _pause;
+  final SeekSongUseCase _seek;
 
-  AudioController()
-      : super(AudioState(
-          currentIndex: 0,
-          currentPosition: Duration.zero,
-          isPlaying: false,
-        )) {
-    _init();
+  final List<Song> _songs = localSongs;
+
+  AudioController(this._play, this._pause, this._seek)
+      : super(AudioState(currentIndex: 0, currentPosition: Duration.zero, isPlaying: false)) {
+    _play.onCompleted.listen((_) => _handleCompletion());
+    _play.onPositionChanged.listen((pos) => state = state.copyWith(currentPosition: pos));
   }
 
-  void _init() {
-    _audioPlayer.onPositionChanged.listen((position) {
-      state = state.copyWith(currentPosition: position);
-    });
-
-    _audioPlayer.onDurationChanged.listen((duration) {
-      state = state.copyWith(totalDuration: duration);
-    });
-
-    _audioPlayer.onPlayerComplete.listen((event) {
-      state = state.copyWith(isPlaying: false, currentPosition: Duration.zero);
-    });
-
-    _loadSong(state.currentIndex);
+  Future<void> playCurrent() async {
+    final song = _songs[state.currentIndex];
+    await _play(song.audioUrl);
+    state = state.copyWith(isPlaying: true);
   }
 
-  void _loadSong(int index) async {
-    final song = _allSongs[index];
-    await _audioPlayer.stop();
-    await _audioPlayer.setSourceAsset(song.audioUrl);
-
-    state = state.copyWith(
-      currentIndex: index,
-      currentPosition: Duration.zero,
-      totalDuration: song.duration,
-      isPlaying: false,
-    );
+  Future<void> pause() async {
+    await _pause();
+    state = state.copyWith(isPlaying: false);
   }
 
-  void setCurrentSong(Song song) {
-    final index = _allSongs.indexWhere((s) => s.id == song.id);
-    if (index != -1 && index != state.currentIndex) {
-      _loadSong(index);
-    }
+  void next() {
+    final nextIndex = (state.currentIndex + 1) % _songs.length;
+    state = state.copyWith(currentIndex: nextIndex);
+    playCurrent();
   }
 
-  void playPause() async {
-    if (state.isPlaying) {
-      await _audioPlayer.pause();
-    } else {
-      await _audioPlayer.resume();
-    }
-    state = state.copyWith(isPlaying: !state.isPlaying);
+  void previous() {
+    final prevIndex = (state.currentIndex - 1 + _songs.length) % _songs.length;
+    state = state.copyWith(currentIndex: prevIndex);
+    playCurrent();
   }
 
-  void seek(double seconds) async {
-    await _audioPlayer.seek(Duration(seconds: seconds.toInt()));
+  void seek(Duration position) async {
+    await _seek(position);
   }
 
-  void playNext() {
-    if (state.currentIndex < _allSongs.length - 1) {
-      _loadSong(state.currentIndex + 1);
-    }
+  void _handleCompletion() {
+    next();
   }
 
-  void playPrevious() {
-    if (state.currentIndex > 0) {
-      _loadSong(state.currentIndex - 1);
-    }
-  }
-
-  Song get currentSong => _allSongs[state.currentIndex];
-  List<Song> get allSongs => _allSongs;
+  Song get currentSong => _songs[state.currentIndex];
 }
 
 class AudioState {
   final int currentIndex;
   final Duration currentPosition;
-  final Duration? totalDuration;
+  final Duration totalDuration;  
   final bool isPlaying;
 
   AudioState({
     required this.currentIndex,
     required this.currentPosition,
-    this.totalDuration,
     required this.isPlaying,
+    this.totalDuration = Duration.zero,  
   });
 
   AudioState copyWith({
     int? currentIndex,
     Duration? currentPosition,
-    Duration? totalDuration,
+    Duration? totalDuration,   
     bool? isPlaying,
   }) {
     return AudioState(
       currentIndex: currentIndex ?? this.currentIndex,
       currentPosition: currentPosition ?? this.currentPosition,
-      totalDuration: totalDuration ?? this.totalDuration,
+      totalDuration: totalDuration ?? this.totalDuration,  
       isPlaying: isPlaying ?? this.isPlaying,
     );
   }
-} 
-
+}

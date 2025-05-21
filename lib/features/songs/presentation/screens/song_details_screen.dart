@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:listefy_applciation/core/utils/format_minute_seconds.dart';
 import 'package:listefy_applciation/features/songs/presentation/providers/audio_state_provider.dart';
 
-
 class SongDetailsScreen extends ConsumerWidget {
   const SongDetailsScreen({super.key});
 
@@ -13,7 +12,7 @@ class SongDetailsScreen extends ConsumerWidget {
     final controller = ref.read(audioControllerProvider.notifier);
     final song = controller.currentSong;
 
-    final maxDuration = state.totalDuration?.inSeconds.toDouble() ?? 1.0;
+    const maxDuration = 1.0;
     final currentValue =
         state.currentPosition.inSeconds.toDouble().clamp(0.0, maxDuration);
 
@@ -59,14 +58,15 @@ class SongDetailsScreen extends ConsumerWidget {
               value: currentValue,
               max: maxDuration,
               min: 0.0,
-              onChanged: (value) => controller.seek(value),
+              onChanged: (value) =>
+                  controller.seek(Duration(seconds: value.toInt())),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(formatDuration(state.currentPosition),
                     style: const TextStyle(color: Colors.white70)),
-                Text(formatDuration(state.totalDuration ?? Duration.zero),
+                Text(formatDuration(state.totalDuration),
                     style: const TextStyle(color: Colors.white70)),
               ],
             ),
@@ -77,7 +77,7 @@ class SongDetailsScreen extends ConsumerWidget {
                 IconButton(
                   icon: const Icon(Icons.skip_previous,
                       color: Colors.white, size: 48),
-                  onPressed: controller.playPrevious,
+                  onPressed: controller.previous,
                 ),
                 IconButton(
                   icon: Icon(
@@ -87,12 +87,12 @@ class SongDetailsScreen extends ConsumerWidget {
                     size: 64,
                     color: Colors.white,
                   ),
-                  onPressed: controller.playPause,
+                  onPressed: controller.pause,
                 ),
                 IconButton(
                   icon: const Icon(Icons.skip_next,
                       color: Colors.white, size: 48),
-                  onPressed: controller.playNext,
+                  onPressed: controller.next,
                 ),
               ],
             ),
