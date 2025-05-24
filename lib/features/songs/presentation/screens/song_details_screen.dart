@@ -1,72 +1,64 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:listefy_applciation/core/utils/format_minute_seconds.dart';
-import 'package:listefy_applciation/features/songs/presentation/providers/audio_state_provider.dart';
-
+import 'package:listefy_applciation/features/songs/domain/entities/song.dart';
+import 'package:listefy_applciation/features/songs/presentation/providers/audio_player_provider.dart';
+import 'package:listefy_applciation/core/utils/song_format_duration.dart';
 
 class SongDetailsScreen extends ConsumerWidget {
-  const SongDetailsScreen({super.key});
+  final Song song;
+
+  const SongDetailsScreen({super.key, required this.song});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(audioControllerProvider);
-    final controller = ref.read(audioControllerProvider.notifier);
-    final song = controller.currentSong;
+    final player = ref.watch(audioPlayerProvider(song));
+    final controller = ref.read(audioPlayerProvider(song).notifier);
 
-    final maxDuration = state.totalDuration?.inSeconds.toDouble() ?? 1.0;
-    final currentValue =
-        state.currentPosition.inSeconds.toDouble().clamp(0.0, maxDuration);
+    final maxDuration = player.totalDuration.inSeconds.toDouble();
+    final currentValue = player.currentPosition.inSeconds.clamp(0, maxDuration);
 
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: Text(song.title),
+        title: Text(player.currentSong.title),
         foregroundColor: Colors.white,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(16),
               child: Image.asset(
-                song.imageUrl,
+                player.currentSong.imageUrl,
                 width: double.infinity,
                 height: 300,
                 fit: BoxFit.cover,
               ),
             ),
             const SizedBox(height: 20),
-            Text(
-              song.title,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            Text(player.currentSong.title,
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold)),
             const SizedBox(height: 10),
-            Text(
-              song.artist,
-              style: TextStyle(
-                color: Colors.white.withOpacity(0.7),
-                fontSize: 18,
-              ),
-            ),
+            Text(player.currentSong.artist,
+                style: TextStyle(
+                    color: Colors.white.withOpacity(0.7), fontSize: 18)),
             const SizedBox(height: 20),
             Slider(
-              value: currentValue,
+              value: currentValue.toDouble(),
               max: maxDuration,
-              min: 0.0,
-              onChanged: (value) => controller.seek(value),
+              onChanged: controller.seek,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(formatDuration(state.currentPosition),
+                Text(formatDuration(player.currentPosition),
                     style: const TextStyle(color: Colors.white70)),
-                Text(formatDuration(state.totalDuration ?? Duration.zero),
+                Text(formatDuration(player.totalDuration),
                     style: const TextStyle(color: Colors.white70)),
               ],
             ),
@@ -81,13 +73,13 @@ class SongDetailsScreen extends ConsumerWidget {
                 ),
                 IconButton(
                   icon: Icon(
-                    state.isPlaying
+                    player.isPlaying
                         ? Icons.pause_circle_filled
                         : Icons.play_circle_fill,
                     size: 64,
                     color: Colors.white,
                   ),
-                  onPressed: controller.playPause,
+                  onPressed: controller.togglePlayPause,
                 ),
                 IconButton(
                   icon: const Icon(Icons.skip_next,

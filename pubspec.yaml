@@ -38,9 +38,8 @@ dependencies:
   flutter_svg: ^2.1.0
   google_fonts: ^6.2.1
   audioplayers: ^6.4.0
+  get_it: ^8.0.3
   flutter_riverpod: ^2.6.1
-  riverpod: ^2.6.1
-
 
 dev_dependencies:
   flutter_test:
