@@ -18,7 +18,7 @@ class SongDetailsScreen extends ConsumerWidget {
     final currentValue = player.currentPosition.inSeconds.clamp(0, maxDuration);
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors. black,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: Text(player.currentSong.title),
@@ -67,8 +67,8 @@ class SongDetailsScreen extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
-                  icon: const Icon(Icons.skip_previous,
-                      color: Colors.white, size: 48),
+                  icon:
+                      const Icon(Icons.skip_previous, color: Colors.white, size: 48),
                   onPressed: controller.playPrevious,
                 ),
                 IconButton(
@@ -82,8 +82,8 @@ class SongDetailsScreen extends ConsumerWidget {
                   onPressed: controller.togglePlayPause,
                 ),
                 IconButton(
-                  icon: const Icon(Icons.skip_next,
-                      color: Colors.white, size: 48),
+                  icon:
+                      const Icon(Icons.skip_next, color: Colors.white, size: 48),
                   onPressed: controller.playNext,
                 ),
               ],
