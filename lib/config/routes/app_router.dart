@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:listefy_applciation/features/auth/presentation/screens/auth_screen.dart';
 import 'package:listefy_applciation/features/songs/domain/entities/song.dart';
+import 'package:listefy_applciation/features/songs/presentation/screens/add_song_screen.dart';
 
 import 'package:listefy_applciation/home_screen.dart';
 
@@ -22,6 +23,9 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => SongDetailsScreen(song: song),
         );
+
+      case AppRoutes.addSong:
+        return MaterialPageRoute(builder: (_) => const AddSongScreen());
 
       default:
         return MaterialPageRoute(

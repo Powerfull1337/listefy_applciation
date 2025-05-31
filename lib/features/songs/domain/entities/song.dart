@@ -1,11 +1,11 @@
 class Song {
   final String id;
   final String title;
-   final String artist;
+  final String artist;
   // final String album;
-   final Duration duration;
-   final String audioUrl;
-   final String imageUrl;
+  final Duration duration;
+  final String filePath;
+  final String imageUrl;
   // final String coverUrl;
   // final DateTime releaseDate;
   // final List<String> genres;
@@ -21,11 +21,11 @@ class Song {
   Song({
     required this.id,
     required this.title,
-     required this.artist,
+    required this.artist,
     // required this.album,
-     required this.duration,
-     required this.audioUrl,
-     required this.imageUrl,
+    required this.duration,
+    required this.filePath,
+    required this.imageUrl,
     // required this.coverUrl,
     // required this.releaseDate,
     // required this.genres,

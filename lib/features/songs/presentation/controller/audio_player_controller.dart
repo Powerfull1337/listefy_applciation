@@ -41,10 +41,12 @@ class AudioPlayerController extends StateNotifier<AudioPlayerState> {
         super(AudioPlayerState(
           isPlaying: false,
           currentPosition: Duration.zero,
-          totalDuration: allSongs.firstWhere(
-            (s) => s.id == initialSong.id,
-            orElse: () => initialSong,
-          ).duration,
+          totalDuration: allSongs
+              .firstWhere(
+                (s) => s.id == initialSong.id,
+                orElse: () => initialSong,
+              )
+              .duration,
           currentSong: initialSong,
         )) {
     if (currentIndex == -1) {
@@ -56,12 +58,12 @@ class AudioPlayerController extends StateNotifier<AudioPlayerState> {
 
   void _initPlayer() async {
     try {
-      if (state.currentSong.audioUrl.isEmpty) {
+      if (state.currentSong.filePath.isEmpty) {
         print('Audio URL is empty');
         return;
       }
 
-      await _audioPlayer.setSourceAsset(state.currentSong.audioUrl);
+      await _audioPlayer.setSourceAsset(state.currentSong.filePath);
     } catch (e, st) {
       print('Error setting source: $e');
       print('StackTrace: $st');
@@ -81,7 +83,8 @@ class AudioPlayerController extends StateNotifier<AudioPlayerState> {
 
     _audioPlayer.onPlayerComplete.listen((_) {
       if (mounted) {
-        state = state.copyWith(isPlaying: false, currentPosition: Duration.zero);
+        state =
+            state.copyWith(isPlaying: false, currentPosition: Duration.zero);
       }
     });
   }
@@ -106,7 +109,7 @@ class AudioPlayerController extends StateNotifier<AudioPlayerState> {
     if (currentIndex < allSongs.length - 1) {
       currentIndex++;
       final nextSong = allSongs[currentIndex];
-      await _audioPlayer.setSourceAsset(nextSong.audioUrl);
+      await _audioPlayer.setSourceAsset(nextSong.filePath);
       if (mounted) {
         state = state.copyWith(
           currentSong: nextSong,
@@ -122,7 +125,7 @@ class AudioPlayerController extends StateNotifier<AudioPlayerState> {
     if (currentIndex > 0) {
       currentIndex--;
       final prevSong = allSongs[currentIndex];
-      await _audioPlayer.setSourceAsset(prevSong.audioUrl);
+      await _audioPlayer.setSourceAsset(prevSong.filePath);
       if (mounted) {
         state = state.copyWith(
           currentSong: prevSong,

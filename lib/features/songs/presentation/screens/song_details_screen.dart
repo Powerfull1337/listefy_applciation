@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:listefy_applciation/features/songs/domain/entities/song.dart';
 import 'package:listefy_applciation/features/songs/presentation/providers/audio_player_provider.dart';
 import 'package:listefy_applciation/core/utils/song_format_duration.dart';
@@ -18,7 +19,7 @@ class SongDetailsScreen extends ConsumerWidget {
     final currentValue = player.currentPosition.inSeconds.clamp(0, maxDuration);
 
     return Scaffold(
-      backgroundColor: Colors. black,
+      backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: Text(player.currentSong.title),
@@ -30,7 +31,7 @@ class SongDetailsScreen extends ConsumerWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(16),
-              child: Image.asset(
+              child: SvgPicture.asset(
                 player.currentSong.imageUrl,
                 width: double.infinity,
                 height: 300,
@@ -67,8 +68,8 @@ class SongDetailsScreen extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
-                  icon:
-                      const Icon(Icons.skip_previous, color: Colors.white, size: 48),
+                  icon: const Icon(Icons.skip_previous,
+                      color: Colors.white, size: 48),
                   onPressed: controller.playPrevious,
                 ),
                 IconButton(
@@ -82,8 +83,8 @@ class SongDetailsScreen extends ConsumerWidget {
                   onPressed: controller.togglePlayPause,
                 ),
                 IconButton(
-                  icon:
-                      const Icon(Icons.skip_next, color: Colors.white, size: 48),
+                  icon: const Icon(Icons.skip_next,
+                      color: Colors.white, size: 48),
                   onPressed: controller.playNext,
                 ),
               ],
